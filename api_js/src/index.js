@@ -1,23 +1,36 @@
 const express = require('express');
 
-//criando um servidor web através do express
+//Criando um servidor web através do express
 const app = express();
 
-//configurando uma requisição com o metodo get para 
-// a raiz da aplicação
-app.get("/", function(require, response){
-    console.log("Primeira requisição recebida!");
-    response.status(200).json({ message: "Resposta enviada em JSON"});
+//configurar a aplicação para receber dados no formato json
+app.use(express.json());
+
+//Configurando uma requisição com o método GET para 
+//a raiz da aplicação 
+app.get("/", function(request, response){
+    response.status(200).json({ message : "Reposta enviada em JSON"});
 });
 
 //EXERCICIO - CRIAR UMA NOVA ROTA/FUNCIONALIDADE PARA RECEBER UMA
 //INFORMAÇÃO PELO CORPO DA REQUISIÇÃO
+//POSTMAN, INSOMNIA e RESTCLIENT
+app.get("/:categoria/:produto", (request, response) => { // pode ser feito assim também, o => substitui o function
+    // const produto = request.params.produto;
+    // const categoria = request.params.categoria;    // ou
+    const { produto, categoria} = request.params;
+    console.log(produto, categoria);
+    response.status(200).json({message : "Categoria: " + categoria + " Produto: " + produto});
+    // console.log(request.params.produto, request.params.categoria);
+})
 
-//EXERCICIO - CRIAR UMA NOVA ROTA/FUNCIONALIDADE PARA RECEBER UMA
-//INFORMAÇÃO PELA URL DA REQUISIÇÃO
+app.post("/", (request, response) => {
+    console.log(request.body);
+    response.status(201).json({ message : "Categoria cadastrada!", categoria : request.body});
+});
 
-// O camando listen roda a aplicação
+// O comando listen roda a aplicação
 app.listen(3000, function(){
     console.clear();
-    console.log("Aplicação rodando na porta 3000");
-})
+    console.log("Aplicação rodando na porta 3000.");
+});
